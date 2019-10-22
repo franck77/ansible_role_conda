@@ -1,0 +1,27 @@
+---
+# tasks file for anaconda setting
+
+- name: Installing anaconda...
+  include: install.yml
+  when: state in [ "role_conda_install", "role_conda_whole_install" ]
+
+- name: Configuring anaconda path...
+  include: config.yml
+  when: state in [ "role_conda_config", "role_conda_whole_install" ]
+
+- name: "Create/remove python env..."
+  include: pyenv.yml
+  with_items: "{{ role_conda_pyenvs }}"
+  when: state in [ "role_conda_pyenv", "role_conda_whole_install" ]
+
+- name: Add/Remove python libs...
+  include: pylib.yml pyenv_name={{ item.0.name }} pylib_name={{ item.1.name }} pylib_version={{ item.1.version | default("") }} pylib_type={{ item.1.type }} pylib_extras={{ item.1.extras|default ('') }} pylib_url={{ item.1.url }} pylib_state={{ item.1.state }}
+  with_subelements:
+    - "{{ role_conda_pyenvs }}"
+    - libs
+  when: state in [ "role_conda_pylib", "role_conda_whole_install" ]
+
+- name: Remove anaconda...
+  include: remove.yml
+  when: state in ["role_conda_remove"]
+

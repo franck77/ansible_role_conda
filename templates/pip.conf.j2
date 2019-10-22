@@ -1,0 +1,5 @@
+[global]
+index-url = {{ role_conda_pip_index_url }}
+
+[install]
+trusted-host={% for trusted_host in role_conda_pip_trusted_hosts %}{% set trusted_host_line = trusted_host + "\n" %} {{ trusted_host_line}}{% endfor %}

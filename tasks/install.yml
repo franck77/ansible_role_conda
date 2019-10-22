@@ -1,0 +1,105 @@
+---
+
+- name:  "Check that input variables are well transmitted to install conda"
+  assert:
+    that: "{{ item }} is defined"
+  with_items:
+   - role_conda_path_conda_exe
+   - role_conda_installer_url
+   - role_conda_tempory_path
+   - role_conda_installer_sh
+   - role_conda_download_timeout_seconds
+   - role_conda_parent_dir
+   - role_conda_root_conda
+   - role_conda_owner
+   - role_conda_group
+   - role_conda_uid
+   - role_conda_gid
+   - role_conda_home_dir
+   - role_conda_user_default_shell
+
+### USER & GROUP ###
+
+- name: Check if users already exist
+  shell: "cat /etc/passwd | grep {{ role_conda_owner }}"
+  register: check_user
+  changed_when: check_user.rc != 0
+  failed_when: False
+
+- name: Check if groups already exist
+  shell: "cat /etc/group | grep {{ role_conda_group }}"
+  register: check_group
+  changed_when: check_group.rc != 0
+  failed_when: False
+
+- name: "Add Conda user inside passwd"
+  become: true
+  lineinfile:
+    dest: "/etc/passwd"
+    state: "present"
+    line: "{{ role_conda_owner }}:x:{{ role_conda_uid }}:{{ role_conda_gid }}::{{ role_conda_home_dir }}:{{ role_conda_user_default_shell }}"
+  when: check_user.changed
+
+- name: "Add Conda group inside group"
+  become: true
+  lineinfile:
+    dest: "/etc/group"
+    line: "{{ role_conda_group }}:x:{{ role_conda_gid }}:{{ role_conda_owner }}"
+  when: check_group.changed
+
+- name: "Create Conda group"
+  become: "true"
+  action: group name={{role_conda_group}} state=present gid={{role_conda_gid}}
+  when: check_group.changed
+
+- name: "Create Conda User"
+  become: "true"
+  user:
+    name: "{{ role_conda_owner }}"
+    uid: "{{ role_conda_uid }}"
+    shell: "{{ role_conda_user_default_shell }}"
+    group: "{{ role_conda_group }}"
+    home: "{{ role_conda_home_dir }}"
+  when: check_user.changed
+
+- name: "Check if destination product directory exist and if the exe conda exist" 
+  become: true
+  stat:
+    path: "{{ role_conda_path_conda_exe }}"
+  register: check_dir_exist
+
+###
+
+- name: "Download conda installer..."
+  get_url:
+    url: "{{ role_conda_installer_url }}"
+    dest: "{{ role_conda_tempory_path }}/{{ role_conda_installer_sh }}"
+    timeout: "{{ role_conda_download_timeout_seconds }}"
+    force_basic_auth: yes
+    mode: "0755"
+  when: not check_dir_exist.stat.exists
+
+- name: "Assure conda base path exists and verify owner and rights"
+  become: "true"
+  file:
+    path: "{{ role_conda_parent_dir }}"
+    state: directory
+    owner: "{{ role_conda_owner }}"
+    group: "{{ role_conda_group }}"
+    mode: 0755
+    recurse: "yes"
+
+- name: "Installing {{ role_conda_installer_sh }} ..."
+  become: "true"
+  command: "{{ role_conda_tempory_path }}/{{ role_conda_installer_sh }} -b -p {{ role_conda_root_conda }}"
+  async: "600"
+  poll: "5"
+  when:  not check_dir_exist.stat.exists
+
+- name: "Cleanup Anaconda installer..."
+  become: "true"
+  file:
+    path: "{{ role_conda_tempory_path }}/{{ role_conda_installer_sh }}"
+    state: "absent"
+  when:  not check_dir_exist.stat.exists
+

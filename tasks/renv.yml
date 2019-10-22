@@ -1,0 +1,6 @@
+---
+
+- name: "Create R environnement in conda"
+  become_user: "root"
+  shell : "{{ anaconda_parent_dir }}/{{ anaconda_dir_name }}/bin/conda install r-essentials"
+

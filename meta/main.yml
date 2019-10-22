@@ -1,0 +1,20 @@
+---
+galaxy_info:
+  author: CCBD
+  description: Role that install Anaconda and a bunch of conda libs
+  company: Societe Genetale
+  license:
+    - MIT
+  min_ansible_version: 2.0
+  platforms:
+    - name: EL
+      versions:
+        - all
+    - name: Fedora
+      versions:
+        - all
+  galaxy_tags:
+    - anaconda
+    - conda
+    - python
+    - pip

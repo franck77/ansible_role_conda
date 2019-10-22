@@ -1,0 +1,29 @@
+---
+
+- name: Remove anaconda bin path to profile file...
+  become: True
+  lineinfile:
+    dest: "{{ role_conda_root_home }}/.bash_profile"
+    line: 'export PATH=$PATH:{{role_conda_parent_dir}}/{{role_conda_dir_name}}/bin'
+    insertafter: 'EOF'
+    regexp: 'export PATH=\$PATH:{{role_conda_parent_dir}}/{{role_conda_dir_name}}/bin'
+    state: absent
+
+- name: Remove conda config channel...
+  become: True
+  file:
+    path: "{{ role_conda_root_home }}/.condarc"
+    state: absent
+
+- name: Remove pip config repo...
+  become: True
+  file:
+    path: "{{ role_conda_root_home }}/.pip"
+    state: absent
+
+- name: uninstall Anaconda ...
+  become: True
+  file:
+    path: '{{role_conda_parent_dir}}/{{role_conda_dir_name}}'
+    state: absent
+

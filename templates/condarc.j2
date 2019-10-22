@@ -1,0 +1,9 @@
+channels:
+{% for channel_repo in role_conda_remote_repos %}
+  - {{ channel_repo }}
+{% endfor %}
+  - defaults
+default_channels:
+{% for channel_repo in role_conda_remote_repos %}
+  - {{ channel_repo }}
+{% endfor %}

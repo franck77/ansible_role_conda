@@ -1,0 +1,41 @@
+---
+
+### Variablre for owner Conda
+role_conda_owner: "conda"
+role_conda_group: "{{ role_conda_owner }}"
+role_conda_user_default_shell: "/bin/sh"
+
+### Max time to wait for download installer
+role_conda_download_timeout_seconds: "60"
+
+### Tmp directory where the installer will be copy
+role_conda_tempory_path: "/tmp"
+
+
+### Root directory product for conda
+role_conda_root_conda: "{{ role_conda_parent_dir }}/{{ role_conda_dir_name }}"
+
+### bin directory for conda
+role_conda_path_bin: "{{ role_conda_root_conda }}/bin"
+
+### Exe conda path
+role_conda_path_conda_exe: "{{ role_conda_path_bin }}/conda"
+
+### Exe activate conda env path
+role_conda_path_conda_activate: "{{ role_conda_path_bin }}/activate"
+
+### Path resources python
+role_conda_path_resources: "{{ role_conda_root_conda }}/resources"
+
+### Path env python
+role_conda_path_env: "{{ role_conda_root_conda }}/envs"
+
+### Path conda conf
+role_conda_config_conda: "{{ role_conda_root_home }}/.condarc"
+
+### Directory for PIP conf
+role_conda_pip_directory: "{{ role_conda_root_home }}/.pip"
+
+### Path PIP conf
+role_conda_pip_config: "{{ role_conda_pip_directory }}/pip.conf"
+

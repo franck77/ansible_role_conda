@@ -1,0 +1,119 @@
+---
+
+- name: "version spécifiée"
+  set_fact:
+    version_expression: "=={{ item.1.version }}"
+  when: item.1.version is defined
+
+- name: "version non spécifiée"
+  set_fact:
+    version_expression: ""
+  when: pylib_version is undefined or pylib_version == ""
+
+### CONDA
+
+# INSTALL
+- name: "Install lib {{ pylib_name }} with conda from {{ pyenv_name }} ..."
+  become: "true"
+  shell : "source {{ role_conda_path_conda_activate }} {{ pyenv_name }} && {{ role_conda_path_conda_exe }} install {{ pylib_extras }} -y {{ pylib_name }}{{ version_expression }}"
+  when: (pylib_type == "conda" or pylib_type == "condadata") and (pylib_state == "present")
+#
+
+# REMOVE
+- name: "Remove lib {{ pylib_name }} with conda from {{ pyenv_name }} ..."
+  become: "true"
+  shell: "{{ role_conda_path_conda_exe }} remove -y {{ pylib_name }}"
+  when: pylib_type == "conda" and pylib_state == "absent"
+  args:
+    removes: "{{ role_conda_path_env }}/{{ pyenv_name }}"
+#
+
+###
+
+### PIP
+# INSTALL
+
+- name: "Install lib {{ pylib_name }} with pip from {{ pyenv_name }} ..."
+  become: "true"
+  shell : "{{ role_conda_path_env }}/{{ pyenv_name }}/bin/pip install {{ pylib_name }}{{ version_expression }}"
+  when: (pylib_type == "pip" or pylib_type == "pipdata") and (pylib_state == "present")
+  args:
+    removes: "{{ role_conda_path_env }}/{{ pyenv_name }}"
+#
+
+# REMOVE
+- name: "Remove lib {{ pylib_name }} with pip from {{ pyenv_name }} ..."
+  become: "true"
+  shell : "{{ role_conda_path_env }}/{{ pyenv_name }}/bin/pip uninstall -y {{ pylib_name }}"
+  when: (pylib_type == "pip" or pylib_type == "local") and pylib_state == "absent"
+  ignore_errors: yes
+  args:
+    removes: "{{ role_conda_path_env }}/{{ pyenv_name }}"
+#
+
+###
+
+### LOCAL
+
+# INSTALL
+- name: "Get lib {{ pylib_name }} as local package for {{ pyenv_name }} ..."
+  become: "true"
+  unarchive:
+    src : "{{ pylib_url }}"
+    dest : "{{ role_conda_tempory_path }}/{{ pylib_name }}"
+  when: pylib_type == "local" and pylib_state == "present"
+
+- name: "Install lib {{ pylib_name }} with local package from {{ pyenv_name }} ..."
+  become: "true"
+  shell : "source {{ role_conda_path_conda_activate }} {{ pyenv_name }} && {{ role_conda_path_env }}/{{ pyenv_name }}/bin/python setup.py install"
+  when: pylib_type == "local" and pylib_state == "present"
+  args:
+    chdir: "{{ role_conda_tempory_path }}/{{ pylib_name }}"
+#
+
+# REMOVE
+- name: "Remove temporary local lib {{ pylib_name }} used to be installed for {{ pyenv_name }} ..."
+  become: "true"
+  file :
+    path : "{{ role_conda_tempory_path }}/{{ pylib_name }}"
+    state: "absent"
+  when: pylib_type == "local" and pylib_state == "absent"
+  args:
+    removes: "{{ role_conda_path_env }}/{{ pyenv_name }}"
+#
+
+###
+
+### DATA
+# INSTALL
+- name: "Ensures resources dir exists"
+  become: "true"
+  file:
+    path: "{{ role_conda_path_resources }}"
+    state: "directory"
+    recurse: "yes"
+
+- name: "Get data for the package"
+  become: "true"
+  unarchive:
+    remote_src: "true"
+    src : "{{ pylib_url }}"
+    dest : "{{ role_conda_path_resources }}/"
+  when: (pylib_type == "condadata" or pylib_type == "pipdata") and (pylib_state == "present")
+#
+
+# REMOVE
+- name: "Remove data for the package"
+  become: "true"
+  file :
+    path: "{{ role_conda_path_resources }}/{{ item.1.package_data }}"
+    state: "absent"
+  when: (pylib_type == "condadata" or pylib_type == "pipdata") and (pylib_state == "absent")
+#
+
+###
+
+- name: "Clean conda cache"
+  become: "true"
+  shell: "{{ role_conda_path_conda_exe }} clean --all -y"
+

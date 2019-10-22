@@ -1,0 +1,122 @@
+---
+
+### Variables for conda user
+role_conda_owner: "conda"
+role_conda_group: "{{ role_conda_owner }}"
+role_conda_uid: "49000002"
+role_conda_gid: "{{ role_conda_uid }}"
+role_conda_home_dir: "/produits/miniconda"
+role_conda_user_default_shell: "/bin/sh"
+
+### Server where the repos, packages and binaries are hosted
+role_conda_hosted_repos: "dhadlx04.dns21.socgen"
+
+### Anaconda or miniconda script name
+role_conda_installer_sh: "Anaconda2-5.0.1-Linux-x86_64.sh"
+#role_conda_installer_sh: "Miniconda3-4.6.14-Linux-x86_64.sh"
+
+### Link for anaconda script
+role_conda_installer_url: "http://{{ role_conda_hosted_repos }}/resources/binaries/{{ role_conda_installer_sh }}"
+
+### Base path for anaconda installation
+role_conda_parent_dir: "/applis/hadd/produits"
+
+### Anaconda default dir
+role_conda_dir_name: "anaconda2"
+
+#Anaconda remote url channels that host libraries
+role_conda_remote_repos : # urls for anaconda repo
+  - "http://{{ role_conda_hosted_repos }}/resources/pyrepos/conda/free"
+  - "http://{{ role_conda_hosted_repos }}/resources/pyrepos/conda/jupyter"
+
+# urls for pip repo
+role_conda_pip_index_url: "http://{{ role_conda_hosted_repos }}/resources/pyrepos/pip"
+
+role_conda_pip_extra_index_url: "{{ role_conda_pip_index_url }}"
+
+role_conda_pip_trusted_hosts: # pip servers name
+  - "{{ role_conda_hosted_repos }}"
+
+# Anaconda python environment description (metadata + all librairies)
+role_conda_pyenvs:
+ - name: "py27"
+   version: "2.7"
+   description: "anaconda"
+   state: present
+   libs:
+     - {name: "catboost", type: "pip", state: "present"}
+     - {name: "nltk", type: "condadata", state: "present", package_data: "nltk_data", url: "http://dhadlx04.dns21.socgen/resources/pyrepos/resources/nltk/nltk_data_full.zip"}
+     - {name: "opencv", type: "conda", state: "present"}
+     - {name: "pandas", type: "conda", state: "present"}
+     - {name: "flask", type: "conda", state: "present"}
+     - {name: "python-docx", type: "pip", state: "present"}
+     - {name: "pdfminer", type: "pip", state: "present"}
+     - {name: "spacy", type: "conda", state: "present"}
+     - {name: "vadersentiment", type: "pip", state: "present"}
+     - {name: "numpy", type: "conda" , state: "present"}
+     - {name: "tensorflow", type: "conda", state: "present"}
+     - {name: "textblob", type: "pip", state: "present"}
+     - {name: "pytorch", type: "conda", state: "present"}
+     - {name: "lightgbm", type: "pip", state: "present"}
+     - {name: "networkx", type: "pip", state: "present"}
+     - {name: "pattern", type: "conda", state: "present"}
+     - {name: "lda", type: "pip", state: "present"}
+     - {name: "chatterbot", type: "pip", state: "present"}
+     - {name: "treetaggerwrapper", type: "pip", state: "present"}
+     - {name: "stanford-corenlp", type: "pip", state: "present"}
+     - {name: "bokeh", type: "pip", state: "present"}
+     - {name: "graphviz", type: "pip", state: "present"}
+     - {name: "ggplot", type: "pip", state: "present"}
+     - {name: "matplotlib", type: "conda", state: "present"}
+     - {name: "gensim", type: "conda", state: "present"}
+     - {name: "keras", type: "pip", state: "present"}
+     - {name: "scipy", type: "conda", state: "present"}
+     - {name: "summa", type: "pip", state: "present"}
+     - {name: "plotly", type: "pip", state: "present"}
+     - {name: "theano", type: "pip", state: "present"}
+     - {name: "mxnet", type: "pip", state: "present"}
+     - {name: "plotly", type: "pip", state: "present"}
+     - {name: "h2o", type: "conda", state: "present"}
+     - {name: "h2o-py", type: "conda", state: "present"}
+     - {name: "statsmodels", type: "conda", state: "present"}
+     - {name: "dyplot", type: "pip", state: "present"}
+     - {name: "catboost", type: "pip", state: "present"}
+
+ - name: "py36"
+   version: "3.6"
+   description: "anaconda"
+   state: present
+   libs:
+     - {name: "catboost", type: "pip", state: "present"}
+     - {name: "nltk", type: "condadata", state: "present", package_data: "nltk_data", url: "http://dhadlx04.dns21.socgen/resources/pyrepos/resources/nltk/nltk_data_full.zip"}
+     - {name: "opencv", type: "conda", state: "present"}
+     - {name: "pandas", type: "conda", state: "present"}
+     - {name: "flask", type: "conda", state: "present"}
+     - {name: "python-docx", type: "pip", state: "present"}
+     - {name: "spacy", type: "conda", state: "present"}
+     - {name: "vadersentiment", type: "pip", state: "present"}
+     - {name: "numpy", type: "conda" , state: "present"}
+     - {name: "tensorflow", type: "conda", state: "present"}
+     - {name: "textblob", type: "pip", state: "present"}
+     - {name: "pytorch", type: "conda", state: "present"}
+     - {name: "lightgbm", type: "pip", state: "present"}
+     - {name: "networkx", type: "pip", state: "present"}
+     - {name: "lda", type: "pip", state: "present"}
+     - {name: "treetaggerwrapper", type: "pip", state: "present"}
+     - {name: "stanford-corenlp", type: "pip", state: "present"}
+     - {name: "bokeh", type: "pip", state: "present"}
+     - {name: "graphviz", type: "pip", state: "present"}
+     - {name: "ggplot", type: "pip", state: "present"}
+     - {name: "matplotlib", type: "conda", state: "present"}
+     - {name: "gensim", type: "conda", state: "present"}
+     - {name: "keras", type: "pip", state: "present"}
+     - {name: "scipy", type: "conda", state: "present"}
+     - {name: "summa", type: "pip", state: "present"}
+     - {name: "plotly", type: "pip", state: "present"}
+     - {name: "theano", type: "pip", state: "present"}
+     - {name: "mxnet", type: "pip", state: "present"}
+     - {name: "plotly", type: "pip", state: "present"}
+     - {name: "h2o", type: "conda", state: "present"}
+     - {name: "statsmodels", type: "conda", state: "present"}
+     - {name: "dyplot", type: "pip", state: "present"}
+     - {name: "catboost", type: "pip", state: "present"}

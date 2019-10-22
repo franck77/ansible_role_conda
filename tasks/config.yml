@@ -1,0 +1,59 @@
+---
+
+- name:  "Check that input variables are well transmitted to config conda"
+  assert:
+    that: "{{ item }} is defined"
+  with_items:
+   - role_conda_root_home
+   - role_conda_path_bin
+   - role_conda_config_conda
+   - role_conda_pip_directory
+   - role_conda_pip_config
+   - role_conda_path_bin
+   - role_conda_owner
+   - role_conda_group
+
+- name: "Add conda bin path into conda bash_profile"
+  become: "true"
+  template:
+    src: "bash_profile.j2"
+    dest: "{{ role_conda_root_home }}/.bash_profile"
+    owner: "{{ role_conda_owner }}"
+    group: "{{ role_conda_group }}"
+    mode: "0744"
+
+- name: "Add conda bin path into conda profile"
+  become: "true"
+  template:
+    src: "bash_profile.j2"
+    dest: "{{ role_conda_root_home }}/.profile"
+    owner: "{{ role_conda_owner }}"
+    group: "{{ role_conda_group }}"
+    mode: "0744"
+
+- name: "Configure defaults channel for conda repo ..."
+  become: "true"
+  template:
+    src: "condarc.j2"
+    dest: "{{ role_conda_config_conda }}"
+    owner: "{{ role_conda_owner }}"
+    group: "{{ role_conda_group }}"
+    mode: "0744"
+
+- name: "Assure that pip home config exist..."
+  become: "true"
+  file:
+    path: "{{ role_conda_pip_directory }}"
+    state: "directory"
+    owner: "{{ role_conda_owner }}"
+    group: "{{ role_conda_group }}"
+    mode: "0755"
+
+- name: "Configure pip custom repository access..."
+  become: "true"
+  template:
+    src: "pip.conf.j2"
+    dest: "{{ role_conda_pip_config }}"
+    owner: "{{ role_conda_owner }}"
+    group: "{{ role_conda_group }}"
+    mode: "0744"

@@ -1,0 +1,18 @@
+---
+
+- name: "Create environment {{ item.name }}..."
+  become: True
+  command: "{{ role_conda_path_conda_exe }} create -y -n {{ item.name }} python={{ item.version }}"
+  args:
+    creates: "{{ role_conda_root_conda }}/envs/{{ item.name }}"
+  async: 2000
+  poll: 2
+  when: item.state == "present"
+
+- name: "Remove environment {{ pyenv_name }}..."
+  become: True
+  command: "{{ role_conda_path_conda_exe }} env remove -y -n {{ pyenv_name }}"
+  args:
+    removes: "{{ role_conda_root_conda }}/envs/{{ pyenv_name }}"
+  when: item.state == "absent"
+
