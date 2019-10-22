@@ -9,7 +9,7 @@ role_conda_home_dir: "/produits/miniconda"
 role_conda_user_default_shell: "/bin/sh"
 
 ### Server where the repos, packages and binaries are hosted
-role_conda_hosted_repos: "dhadlx04.dns21.socgen"
+role_conda_hosted_repos: ""
 
 ### Anaconda or miniconda script name
 role_conda_installer_sh: "Anaconda2-5.0.1-Linux-x86_64.sh"
