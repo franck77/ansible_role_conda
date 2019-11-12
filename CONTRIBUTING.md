@@ -3,11 +3,11 @@ __How to contribute to a SGITHUB project__
 * Fork the repository you want to contribute in your userspace
 *  git clone it on your VM (don't forget to change [my-github-username] matching yours in the following command)
 ```
-$ git clone git@sgithub.fr.world.socgen:[my-github-username]/[project-name]
+$ git clone git@github.com:franck77/ansible_role_conda.git:[my-github-username]/[project-name]
 ```
 * add mainstream repository as a remote called upstream
 ```
-$ git remote add upstream git@sgithub.fr.world.socgen:GTSMKTSSB/[project-name]
+$ git remote add upstream git@github.com:franck77/ansible_role_conda.git:GTSMKTSSB/[project-name]
 ```
 * Create your feature branch
 ```
@@ -27,7 +27,7 @@ $ git pull --rebase upstream
 ```
 $ git push --force-with-lease origin my-new-feature
 ```
-* Create a pull request to the upstream repo using SGITHUB interface
+* Create a pull request to the upstream repo using GITHUB interface
 
 __Good practices to collaborate to a github project__
 

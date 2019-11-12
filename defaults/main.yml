@@ -45,7 +45,6 @@ role_conda_pyenvs:
    state: present
    libs:
      - {name: "catboost", type: "pip", state: "present"}
-     - {name: "nltk", type: "condadata", state: "present", package_data: "nltk_data", url: "http://dhadlx04.dns21.socgen/resources/pyrepos/resources/nltk/nltk_data_full.zip"}
      - {name: "opencv", type: "conda", state: "present"}
      - {name: "pandas", type: "conda", state: "present"}
      - {name: "flask", type: "conda", state: "present"}
@@ -88,7 +87,6 @@ role_conda_pyenvs:
    state: present
    libs:
      - {name: "catboost", type: "pip", state: "present"}
-     - {name: "nltk", type: "condadata", state: "present", package_data: "nltk_data", url: "http://dhadlx04.dns21.socgen/resources/pyrepos/resources/nltk/nltk_data_full.zip"}
      - {name: "opencv", type: "conda", state: "present"}
      - {name: "pandas", type: "conda", state: "present"}
      - {name: "flask", type: "conda", state: "present"}

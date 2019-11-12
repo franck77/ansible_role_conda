@@ -40,7 +40,6 @@ Some updates may have to be done for other needs, you could contact us by creati
 If you want to collaborate, please read the following :  
 [Contributing.md](CONTRIBUTING.md)
 And
-[Git best practices](https://sgithub.fr.world.socgen/GTSMKTSSB/GitBestPractices)
 
 Requirements
 ------------
@@ -128,11 +127,11 @@ Example variables
 -----------------
 
 ```yml
-anaconda_installer_url: "http://dhadlx04.dns21.socgen/repo/binaries/Anaconda3-4.3.1-Linux-x86_64.sh"  # url for anaconda binary 
+anaconda_installer_url: "http://<my_repos_host>/repo/binaries/Anaconda3-4.3.1-Linux-x86_64.sh"  # url for anaconda binary 
 anaconda_parent_dir: "/applis/hadd/produits"    # Base path for anaconda installation
-anaconda_remote_repo : http://dhadlx04.dns21.socgen/repo/pyrepos/conda/free # url for anaconda repo
-pip_index_url: http://dhadlx04.dns21.socgen/repo/pyrepos/pip # url for pip repo
-pip_trusted_host: dhadlx04.dns21.socgen # pip server name
+anaconda_remote_repo : http://<my_repos_host>/repo/pyrepos/conda/free # url for anaconda repo
+pip_index_url: http://<my_repos_host>/repo/pyrepos/pip # url for pip repo
+pip_trusted_host: <my_repos_host> # pip server name
 ```
 
 Python virtual environment description
@@ -155,7 +154,7 @@ pyenvs:
       - {name: "nltk", type: "conda", state: "present"}
       - {name: "pandas", type: "conda", extras: "-c conda-forge", state: "present"}
       - {name: "sklearn", type: "pip", state: "present"}
-      - {name: "cpickle", type: "local", url: "http://dhadlx04.dns21.socgen/resources/pyrepos/sources/sklearn-theano.zip", state: "present"}
+      - {name: "cpickle", type: "local", url: "http://<my_repos_host>/resources/pyrepos/sources/sklearn-theano.zip", state: "present"}
   - name: "py35"
       version: "3.5"
       description: "anaconda"
@@ -167,7 +166,7 @@ pyenvs:
         - {name: "nltk", type: "conda", state: "present"}
         - {name: "pandas", type: "conda", extras: "-c conda-forge", state: "present"}
         - {name: "sklearn", type: "pip", state: "present"}
-        - {name: "cpickle", type: "local", url: "http://dhadlx04.dns21.socgen/resources/pyrepos/sources/sklearn-theano.zip", state: "present"}
+        - {name: "cpickle", type: "local", url: "http://<my_repos_host>/resources/pyrepos/sources/sklearn-theano.zip", state: "present"}
 ....
 ```
 
